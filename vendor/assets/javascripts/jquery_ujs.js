@@ -29,6 +29,9 @@
     // Button elements bound by jquery-ujs
     buttonClickSelector: 'button[data-remote]:not([form]):not(form button), button[data-confirm]:not([form]):not(form button)',
 
+    // Table rows that can act like buttons
+    tableRowClickSelector: 'tr[data-remote]',
+
     // Select elements bound by jquery-ujs
     inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote]',
 
@@ -130,6 +133,11 @@
           data = element.serialize();
           if (element.data('params')) data = data + '&' + element.data('params');
         } else if (element.is(rails.buttonClickSelector)) {
+          method = element.data('method') || 'get';
+          url = element.data('url');
+          data = element.serialize();
+          if (element.data('params')) data = data + '&' + element.data('params');
+        } if (element.is(rails.tableRowClickSelector)) {
           method = element.data('method') || 'get';
           url = element.data('url');
           data = element.serialize();
@@ -446,6 +454,16 @@
         rails.handleMethod(link);
         return false;
       }
+    });
+
+    $document.delegate(rails.tableRowClickSelector, 'click.rails', function(e) {
+      var tableRow = $(this);
+
+      if (!rails.allowAction(tableRow) || !rails.isRemote(tableRow)) return rails.stopEverything(e);
+
+      var handleRemote = rails.handleRemote(tableRow);
+
+      return false;
     });
 
     $document.delegate(rails.buttonClickSelector, 'click.rails', function(e) {
