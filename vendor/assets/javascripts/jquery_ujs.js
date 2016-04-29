@@ -137,7 +137,7 @@
           url = element.data('url');
           data = element.serialize();
           if (element.data('params')) data = data + '&' + element.data('params');
-        } if (element.is(rails.tableRowClickSelector)) {
+        } else if (element.is(rails.tableRowClickSelector)) {
           method = element.data('method') || 'get';
           url = element.data('url');
           data = element.serialize();
